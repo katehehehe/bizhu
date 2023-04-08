@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, createContext } from "react";
 import "../../styles/loginRegister.css";
 import { useNavigate } from "react-router-dom";
+
+export const LoginContext = createContext();
 
 function Login({ onClose }) {
   const navigate = useNavigate();
@@ -30,8 +32,7 @@ function Login({ onClose }) {
       console.log("Response received:", response);
       const data = await response.json();
       console.log("Data received:", data);
-      setisLoggedin(false);
-
+      setisLoggedin(true);
       onClose();
     } catch (error) {
       console.error(error);
@@ -39,42 +40,44 @@ function Login({ onClose }) {
   };
 
   return (
-    <div className="overlay">
-      <div className="modal">
-        <form
-          className="signin-form"
-          onSubmit={(e) => handleSubmit(e, navigate)}
-        >
-          <label className="form-label">
-            Email:
-            <input
-              className="form-input"
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
-            />
-          </label>
-          <label className="form-label">
-            Password:
-            <input
-              className="form-input"
-              type="password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
-          </label>
-          <button className="form-button bg-twitterBlue" type="submit">
-            Log In
-          </button>
-          <button
-            className="form-button bg-twitterBlue bottom-button"
-            onClick={onClose}
+    <LoginContext.Provider value={{ isLoggedin }}>
+      <div className="overlay">
+        <div className="modal">
+          <form
+            className="signin-form"
+            onSubmit={(e) => handleSubmit(e, navigate)}
           >
-            Close
-          </button>
-        </form>
+            <label className="form-label">
+              Email:
+              <input
+                className="form-input"
+                type="email"
+                value={email}
+                onChange={handleEmailChange}
+              />
+            </label>
+            <label className="form-label">
+              Password:
+              <input
+                className="form-input"
+                type="password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+            </label>
+            <button className="form-button bg-twitterBlue" type="submit">
+              Log In
+            </button>
+            <button
+              className="form-button bg-twitterBlue bottom-button"
+              onClick={onClose}
+            >
+              Close
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </LoginContext.Provider>
   );
 }
 
