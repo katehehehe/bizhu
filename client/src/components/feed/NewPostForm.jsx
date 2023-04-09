@@ -1,9 +1,9 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
-import { MainContext } from "../Main";
-import "../styles/newPostForm.css";
+import { MainContext } from "../../Main";
+import "../../styles/newPostForm.css";
 
-function NewPostForm() {
+function NewPostForm({ onNewPost }) {
   const [content, setContent] = useState("");
   const { user } = useContext(MainContext);
 
@@ -19,9 +19,10 @@ function NewPostForm() {
         content,
       });
       console.log("Response received:", response);
-      const data = await response.json();
+      const data = response.data;
       console.log("New post created:", data);
-      // Optionally, redirect to the new post page or update the post list
+      onNewPost(data);
+      setContent("");
     } catch (error) {
       console.error("Error creating post:", error);
     }
@@ -29,7 +30,7 @@ function NewPostForm() {
 
   return (
     <form className="new-post-form">
-      <div className="flex justify-start items-center space-x-4 mb-6">
+      <div className="form-content">
         {/* <img
           className="h-12 w-12 rounded-full"
           src={user.avatar}

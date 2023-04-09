@@ -6,6 +6,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PermIdentityIcon from "@mui/icons-material/PermIdentity";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
+import "../../styles/sidebar.css";
 
 function Sidebar() {
   const [searchValue, setSearchValue] = useState("");
@@ -25,13 +26,13 @@ function Sidebar() {
   };
 
   return (
-    <div className="flex flex-col h-screen w-64 border-r border-gray-200">
+    <div className="flex flex-col h-screen border-r border-gray-200 sidebar">
       <div className="flex h-16 items-center justify-center">
         <TwitterIcon className="text-blue-400 h-8 w-8" />
       </div>
 
       <SidebarOption active Icon={HomeIcon} />
-      <div className="my-4" />
+      <div className="my-4 sidebar__twitterIcon" />
 
       <div className="relative">
         <div onClick={handleSearchClick}>
@@ -61,17 +62,9 @@ function Sidebar() {
       <Link to="/profile">
         <SidebarOption Icon={PermIdentityIcon} />
       </Link>
-
-      <div className="flex-1"></div>
-
-      <div className="flex items-center justify-center mb-8">
-        <Button
-          variant="contained"
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full w-full"
-        >
-          Tweet
-        </Button>
-      </div>
+      <Button className="sidebar-button" type="submit">
+        Tweet
+      </Button>
     </div>
   );
 }

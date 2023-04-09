@@ -89,6 +89,16 @@ app.post("/api/register", async (request, response) => {
   }
 });
 
+// get all tweet posts
+app.get("/api/tweets", async (request, response) => {
+  try {
+    const tweetPosts = await PostModel.find();
+    response.status(200).json({ status: "ok", tweetPosts });
+  } catch (err) {
+    response.status(400).json({ status: "error", error: err.message });
+  }
+});
+
 // get a single tweet by id
 app.get("/api/tweets/:id", async (request, response) => {
   try {
@@ -116,6 +126,25 @@ app.post("/api/tweet", async (request, response) => {
     response.status(400).json({ status: "error", error: err.message });
   }
 });
+// app.post("/api/tweet", async (request, response) => {
+//   try {
+//     const { content } = request.body;
+//     const token = request.headers.authorization;
+//     const decoded = jwt.verify(token, secretKey);
+//     const user = await UserModel.findById(decoded.userId);
+//     if (!user) {
+//       return response
+//         .status(404)
+//         .json({ status: "error", error: "User not found" });
+//     }
+//     const tweetPost = await PostModel.create({ content, user: user._id });
+//     user.tweetPosts.push(tweetPost._id);
+//     await user.save();
+//     response.status(200).json({ status: "ok", tweetPost });
+//   } catch (err) {
+//     response.status(400).json({ status: "error", error: err.message });
+//   }
+// });
 
 app.listen(1337, () => {
   console.log("Server started on port 1337");

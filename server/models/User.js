@@ -10,10 +10,16 @@ const User = new mongoose.Schema(
       type: String,
       default: "http://www.gravatar.com/avatar/?d=mp",
     },
+    tweetPosts: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "TweetPost",
+      },
+    ],
   },
   { collection: "user-data" }
 );
 
-const model = mongoose.model("UserData", User);
+const UserModel = mongoose.model("UserData", User);
 
-module.exports = model;
+module.exports = UserModel;

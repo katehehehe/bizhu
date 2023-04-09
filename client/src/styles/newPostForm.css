@@ -1,13 +1,12 @@
 .new-post-form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: flex-start;
   align-items: flex-start;
-  margin: 10px 0;
+  margin: 10px 50px 10px 0;
   border: 1px solid #e8e8e8;
   border-radius: 10px;
   padding: 10px;
-  max-width: 600px;
 }
 
 .new-post-form textarea {
@@ -19,6 +18,10 @@
   margin: 0;
   outline: none;
   width: calc(100% - 20px);
+  /* white-space: nowrap; */
+}
+.form-content {
+  width: 100%;
 }
 
 .new-post-form button[type="submit"] {
@@ -34,4 +37,24 @@
   max-width: 120px;
   align-self: flex-end;
   margin-left: auto;
+}
+@media (max-width: 767px) {
+  .new-post-form,
+  .post {
+    margin-right: 10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  .new-post-form,
+  .post {
+    margin-right: 30px;
+  }
+}
+
+@media (min-width: 992px) {
+  .new-post-form,
+  .post {
+    margin-right: 50px;
+  }
 }

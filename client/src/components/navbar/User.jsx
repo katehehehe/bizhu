@@ -1,4 +1,4 @@
-import React, { useState, useContext, useRef, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainContext } from "../../Main";
 
@@ -12,38 +12,32 @@ const User = () => {
   };
 
   const handleLogoutClick = () => {
-    // handle logout
     setIsOpen(false);
-    localStorage.removeItem("token"); // Remove the user's access token from local storage
-    setUser(null); // Reset the user state variable to null
+    localStorage.removeItem("token");
+    setUser(null);
     setIsLoggedin(false);
     navigate("/");
   };
 
   const handleProfileClick = () => {
-    // handle profile
     setIsOpen(false);
     navigate("/profile");
   };
-  const handleScreenClick = (e) => {
-    // handle screen click
-    if (isOpen && e.target !== userName.current) {
-      setIsOpen(false);
-    }
-  };
 
-  React.useEffect(() => {
-    document.addEventListener("click", handleScreenClick, false);
-    return () => {
-      document.removeEventListener("click", handleScreenClick, false);
-    };
-  }, [isOpen]);
+  // const handleScreenClick = () => {
+  //   setIsOpen(false);
+  // };
 
+  // useEffect(() => {
+  //   document.addEventListener("click", handleScreenClick, false);
+  //   return () => {
+  //     document.removeEventListener("click", handleScreenClick, false);
+  //   };
+  // }, []);
   return (
     <div className="relative">
       <div
         onClick={handleMenuClick}
-        ref={userName}
         className="flex items-center justify-center w-32 h-8 rounded-md bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 focus:outline-none px-2"
       >
         <span className="mr-1 font-medium">{user && userName}</span>
@@ -68,4 +62,5 @@ const User = () => {
     </div>
   );
 };
+
 export default User;

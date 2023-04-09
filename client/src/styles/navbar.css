@@ -25,8 +25,10 @@
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 14px;
-  margin: 4px 0;
+  font-size: 0.9rem;
+  font-weight: bold;
+  padding: 8px 16px;
+  margin: 15px 0;
   cursor: pointer;
   margin-left: 20px; /* changed to margin-left */
   margin-right: 10px; /* added margin-right */
