@@ -2,10 +2,16 @@ import React, { useState, useContext } from "react";
 import "../../styles/navbar.css";
 import Login from "./Login";
 import Register from "./Register";
+import User from "./User";
+import { MainContext } from "../../Main";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 function Navbar({}) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
+  const [showUser, setShowUser] = useState(false);
+
+  const { isLoggedin } = useContext(MainContext);
 
   const handleLoginClick = () => {
     setShowLogin(true);
@@ -22,12 +28,19 @@ function Navbar({}) {
   const handleCloseRegisterClick = () => {
     setShowRegister(false);
   };
+  const handleUserClick = () => {
+    setShowUser(true);
+  };
+
+  const handleCloseUserClick = () => {
+    setShowUser(false);
+  };
 
   return (
-    <div className="flex flex-row items-center justify-between h-16">
-      <p className="text-center text-4xl flex-grow">Twitter Clone</p>
-
-      <div className="flex">
+    <div>
+      {/* <p className="text-center text-4xl flex-grow">Twitter Clone</p> */}
+      {/* {!isLoggedin && ( */}
+      <div className="flex items-center navbar-buttons">
         <button
           className="navbar-button rounded-full mr-4 bg-twitterBlue"
           onClick={handleLoginClick}
@@ -40,7 +53,15 @@ function Navbar({}) {
         >
           Register
         </button>
+
+        {/* {isLoggedin && ( */}
+        <div className="flex items-center">
+          <User />
+          <AccountCircleIcon className="text-2xl ml-4" />
+        </div>
+        {/* )} */}
       </div>
+      {/* )} */}
       {showLogin && <Login onClose={handleCloseClick} />}
       {showRegister && <Register onClose={handleCloseRegisterClick} />}
     </div>

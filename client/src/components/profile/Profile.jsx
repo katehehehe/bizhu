@@ -24,7 +24,7 @@ function Profile() {
     event.preventDefault();
 
     // Save changes to the database
-    const response = await axios.post(`/api/users/${username}`, {
+    const response = await axios.put(`/api/users/${username}`, {
       username,
       email,
       bio,
@@ -39,7 +39,7 @@ function Profile() {
       </div>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="name">username:</label>
+          <label htmlFor="name">Username:</label>
           <input
             type="text"
             id="name"

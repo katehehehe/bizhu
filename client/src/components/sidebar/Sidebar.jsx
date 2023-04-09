@@ -25,8 +25,8 @@ function Sidebar() {
   };
 
   return (
-    <div className="flex items-center justify-center flex-col h-full w-64 border-r border-gray-200">
-      <div className="flex h-16">
+    <div className="flex flex-col h-screen w-64 border-r border-gray-200">
+      <div className="flex h-16 items-center justify-center">
         <TwitterIcon className="text-blue-400 h-8 w-8" />
       </div>
 
@@ -61,11 +61,13 @@ function Sidebar() {
       <Link to="/profile">
         <SidebarOption Icon={PermIdentityIcon} />
       </Link>
-      <div className="flex items-center justify-center mt-8">
+
+      <div className="flex-1"></div>
+
+      <div className="flex items-center justify-center mb-8">
         <Button
           variant="contained"
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full"
-          fullWidth
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-full w-full"
         >
           Tweet
         </Button>

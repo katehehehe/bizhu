@@ -1,0 +1,28 @@
+.search-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input {
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 16px;
+  width: 300px;
+}
+
+.search-button {
+  border: none;
+  background-color: transparent;
+  margin-left: -40px;
+}
+
+.search-button:hover {
+  cursor: pointer;
+}
+
+.fa-search {
+  font-size: 18px;
+  color: #ccc;
+}

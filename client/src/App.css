@@ -8,7 +8,10 @@
   flex-direction: row;
   height: 100%;
   overflow: hidden;
+
+  width: 100%;
 }
+
 .sidebar {
   flex: 0 0 25%;
 }

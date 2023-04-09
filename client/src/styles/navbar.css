@@ -1,17 +1,53 @@
 .navbar {
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   margin-top: 20px;
+  padding: 0 16px;
+}
+
+.navbar-logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.navbar-buttons {
+  display: flex;
+  flex-direction: row; /* changed to row */
+  align-items: center;
+  justify-content: flex-end; /* changed to flex-end */
 }
 
 .navbar-button {
   border: none;
   color: white;
-  padding: 15px 32px;
+  padding: 10px 20px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
+  font-size: 14px;
+  margin: 4px 0;
   cursor: pointer;
-  margin-right: 20px;
+  margin-left: 20px; /* changed to margin-left */
+  margin-right: 10px; /* added margin-right */
+}
+
+.navbar-icon {
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+@media (max-width: 640px) {
+  .navbar-button {
+    font-size: 14px;
+    padding: 10px 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-button {
+    font-size: 12px;
+    padding: 8px 14px;
+  }
 }
