@@ -7,6 +7,9 @@ const cors = require("cors");
 const crypto = require("crypto");
 const UserModel = require("./models/User");
 const PostModel = require("./models/TweetPost");
+const multer = require("multer");
+const { GridFsStorage } = require("multer-gridfs-storage");
+const fs = require("fs");
 
 app.use(cors());
 app.use(express.json());
@@ -115,36 +118,91 @@ app.get("/api/tweets/:id", async (request, response) => {
 });
 
 // post a new tweet post
-app.post("/api/tweet", async (request, response) => {
-  try {
-    const { content } = request.body;
-    console.log("this is the content" + request.body);
-    const tweetPost = await PostModel.create({ content });
-    console.log("tweetPost created successfully" + tweetPost);
-    response.status(200).json({ status: "ok", tweetPost });
-  } catch (err) {
-    response.status(400).json({ status: "error", error: err.message });
-  }
-});
 // app.post("/api/tweet", async (request, response) => {
 //   try {
 //     const { content } = request.body;
-//     const token = request.headers.authorization;
-//     const decoded = jwt.verify(token, secretKey);
-//     const user = await UserModel.findById(decoded.userId);
-//     if (!user) {
-//       return response
-//         .status(404)
-//         .json({ status: "error", error: "User not found" });
-//     }
-//     const tweetPost = await PostModel.create({ content, user: user._id });
-//     user.tweetPosts.push(tweetPost._id);
-//     await user.save();
+//     console.log("this is the content" + request.body);
+//     const tweetPost = await PostModel.create({ content });
+//     console.log("tweetPost created successfully" + tweetPost);
 //     response.status(200).json({ status: "ok", tweetPost });
 //   } catch (err) {
 //     response.status(400).json({ status: "error", error: err.message });
 //   }
 // });
+
+// const storage = new GridFsStorage({
+//   url: uri,
+//   options: { useNewUrlParser: true, useUnifiedTopology: true },
+//   file: (req, file) => {
+//     const match = ["image/png", "image/jpeg", "image/jpg"];
+
+//     if (match.indexOf(file.mimetype) === -1) {
+//       const filename = `${Date.now()}-image-${file.originalname}`;
+//       return filename;
+//     }
+
+//     return {
+//       bucketName: "photos",
+//       filename: `${Date.now()}-image-${file.originalname}`,
+//     };
+//   },
+// });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage: storage });
+// read the image file into a Buffer object
+
+// app.post("/api/tweet", upload.single("image"), async (request, response) => {
+//   try {
+//     const { content } = request.body;
+//     console.log("Content:", request.body);
+//     // const imageUrl = request.file.filename;
+//     const imageData = fs.readFileSync(request.file.path);
+//     // encode the image data in Base64
+//     const base64ImageData = imageData.toString("base64");
+//     console.log("Image URL:", request.file.filename);
+//     const tweetPost = await PostModel.create({
+//       content,
+//       image: {
+//         data: fs.readFileSync("uploads/" + request.file.filename),
+//         contentType: request.file.mimetype,
+//       },
+//     });
+
+//     console.log("Tweet post created successfully:", tweetPost);
+//     response.status(200).json({ status: "ok", tweetPost });
+//   } catch (err) {
+//     response.status(400).json({ status: "error", error: err.message });
+//   }
+// });
+app.post("/api/tweet", upload.single("image"), (request, response) => {
+  const tweetPost = new PostModel({
+    content: request.body.content,
+    image: {
+      data: fs.readFileSync("uploads/" + request.file.filename),
+      contentType: request.file.mimetype,
+    },
+  });
+
+  if (tweetPost) {
+    tweetPost
+      .save()
+      .then((response) => console.log("image is saved"))
+      .catch((err) => console.log(errr, "error has occurred"));
+
+    console.log("Tweet post created successfully");
+    response.status(200).json({ status: "ok", tweetPost });
+  } else {
+    response.status(400).json({ status: "error", error: err.message });
+  }
+});
 
 app.listen(1337, () => {
   console.log("Server started on port 1337");

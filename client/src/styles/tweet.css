@@ -8,13 +8,18 @@
 
 .tweet h2 {
   margin: 0 0 5px;
-  font-size: 16px;
+  font-size: 40px;
   font-weight: bold;
   color: #14171a;
 }
 
 .tweet p {
   margin: 0;
-  font-size: 14px;
+  font-size: 20px;
+  text-align: left;
   line-height: 1.4;
+}
+.tweet img {
+  max-width: 50%; /* make the image proportion to the screen size */
+  height: auto; /* maintain aspect ratio */
 }

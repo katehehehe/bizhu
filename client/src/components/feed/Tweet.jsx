@@ -1,24 +1,9 @@
-// import React from "react";
-// import "../../styles/tweet.css";
-
-// function Tweet({ tweet }) {
-//   const { username, content, createdAt } = tweet;
-//   const date = new Date(Date.parse(createdAt));
-//   return (
-//     <div className="tweet">
-//       <h2>{username}</h2>
-//       <p className="date text-gray-500">{date.toLocaleString()}</p>
-//       <p className="text-gray-900">{content}</p>
-//     </div>
-//   );
-// }
-
-// export default Tweet;
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../../styles/tweet.css";
 
 function Tweet({ tweet }) {
-  const { username, content, createdAt } = tweet;
+  const { username, content, createdAt, image } = tweet;
+  const [imageData, setImageData] = useState(null);
   const date = new Date(Date.parse(createdAt));
   const now = new Date();
   const diffMinutes = Math.floor((now - date) / (1000 * 60));
@@ -29,11 +14,22 @@ function Tweet({ tweet }) {
   } else if (diffHours < 24) {
     timeAgo = `${diffHours}h ago`;
   }
+
+  useEffect(() => {
+    if (image && image.data) {
+      const base64String = btoa(
+        String.fromCharCode(...new Uint8Array(image.data.data))
+      );
+      setImageData(`data:image/png;base64,${base64String}`);
+    }
+  }, [image]);
+
   return (
     <div className="tweet">
       <h2>{username}</h2>
       {timeAgo && <p className="date text-gray-500">{timeAgo}</p>}
       <p className="text-gray-800">{content}</p>
+      {imageData && <img src={imageData} alt="tweet" />}
     </div>
   );
 }

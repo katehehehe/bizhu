@@ -1,6 +1,6 @@
 .new-post-form {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
   margin: 10px 50px 10px 0;
