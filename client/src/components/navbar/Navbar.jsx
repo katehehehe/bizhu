@@ -31,29 +31,26 @@ function Navbar({}) {
   return (
     <div>
       <div className="flex items-center navbar-buttons">
-        {!isLoggedin && (
-          <>
-            <button
-              className="navbar-button rounded-full mr-4 bg-twitterBlue"
-              onClick={handleLoginClick}
-            >
-              Login
-            </button>
-            <button
-              className="navbar-button rounded-full bg-twitterBlue new-botton"
-              onClick={handleRegisterClick}
-            >
-              Register
-            </button>
-          </>
-        )}
-        {isLoggedin && (
-          <div className="flex items-center">
-            <User />
-            <span className="ml-2">{username}</span>
-            <AccountCircleIcon className="text-2xl ml-4" />
-          </div>
-        )}
+        <>
+          <button
+            className="navbar-button rounded-full mr-4 bg-twitterBlue"
+            onClick={handleLoginClick}
+          >
+            Login
+          </button>
+          <button
+            className="navbar-button rounded-full bg-twitterBlue new-botton"
+            onClick={handleRegisterClick}
+          >
+            Register
+          </button>
+        </>
+
+        <div className="flex items-center">
+          <User />
+          <span className="ml-2">{username}</span>
+          <AccountCircleIcon className="text-2xl ml-4" />
+        </div>
       </div>
       {showLogin && <Login onClose={handleCloseClick} />}
       {showRegister && <Register onClose={handleCloseRegisterClick} />}

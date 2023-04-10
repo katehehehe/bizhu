@@ -10,12 +10,6 @@ const User = new mongoose.Schema(
       type: String,
       default: "http://www.gravatar.com/avatar/?d=mp",
     },
-    tweetPosts: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "TweetPost",
-      },
-    ],
   },
   { collection: "user-data" }
 );

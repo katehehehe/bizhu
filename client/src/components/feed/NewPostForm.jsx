@@ -7,37 +7,43 @@ import "../../styles/newPostForm.css";
 function NewPostForm({ onNewPost }) {
   const [content, setContent] = useState("");
   const { user, username } = useContext(MainContext);
-  const [image, setImage] = useState(null);
+  const [imageSubmit, setImageSubmit] = useState(null);
+  const [imageDisplay, setimageDisplay] = useState(null);
 
   const handleContentChange = (event) => {
     setContent(event.target.value);
   };
   const handleImageChange = (event) => {
+    setImageSubmit(event.target.files[0]);
+  };
+
+  const handleImageDisplayChange = (event) => {
     const file = event.target.files[0];
-    setImage(URL.createObjectURL(file));
+    setimageDisplay(URL.createObjectURL(file));
   };
   const handleImageRemove = () => {
-    setImage(null);
+    setImageSubmit(null);
   };
+
   const handleSubmit = async (event) => {
+    console.log("start to submit the tweet");
     event.preventDefault();
     try {
       console.log("Submitting a new tweet...");
       const formData = new FormData(); // create a new FormData object
       formData.append("content", content); // add the text content to the form data
-      console.log("A image is uploaded", image);
-      if (image) {
-        formData.append("image", image); // add the image file to the form data
+      console.log("A image is uploaded", imageSubmit);
+      if (imageSubmit) {
+        formData.append("image", imageSubmit); // add the image file to the form data
         console.log("form data:", formData);
       }
-      const token = localStorage.getItem("token");
+
       const response = await axios.post(
         "http://localhost:1337/api/tweet",
         formData, // use the form data as the request body
         {
           headers: {
             "Content-Type": "multipart/form-data", // set the content type header to multipart/form-data
-            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -46,7 +52,7 @@ function NewPostForm({ onNewPost }) {
       console.log("New post created:", data);
       onNewPost(data);
       setContent("");
-      setImage(null); // reset the image state after submitting the form
+      setImageSubmit(null); // reset the image state after submitting the form
     } catch (error) {
       console.error("Error creating post:", error);
       if (error.response) {
@@ -72,9 +78,9 @@ function NewPostForm({ onNewPost }) {
       </div>
       <div className="flex flex-row justify-between w-full">
         <div className="image-upload inline-block mx-2">
-          {image ? (
+          {imageSubmit ? (
             <div>
-              <img src={image} alt="Selected" width="150" />
+              <img src={imageDisplay} alt="Selected" width="150" />
               <button onClick={handleImageRemove}>Remove Image</button>
             </div>
           ) : (
@@ -87,8 +93,11 @@ function NewPostForm({ onNewPost }) {
             id="image"
             name="image"
             accept="image/*"
-            onChange={handleImageChange}
-            disabled={image ? true : false} // Disable the input if an image is already selected
+            onChange={(e) => {
+              handleImageChange(e);
+              handleImageDisplayChange(e);
+            }}
+            disabled={imageSubmit ? true : false} // Disable the input if an image is already selected
           />
         </div>
         <button

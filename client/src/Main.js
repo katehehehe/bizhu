@@ -16,15 +16,10 @@ function Main() {
 
   useEffect(() => {
     const storedIsLoggedin = localStorage.getItem("isLoggedin");
-    const storedToken = localStorage.getItem("token");
-    if (storedIsLoggedin && storedToken) {
+    if (storedIsLoggedin) {
       setIsLoggedin(true);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
-      axios.get("http://localhost:1337/api/me").then((response) => {
-        setUser(response.data);
-        setUsername(response.data.name);
-        localStorage.setItem("userName", response.data.name); // Set userName in local storage
-      });
+      // Replace the following line with your code to retrieve user data
+      console.log("Retrieving user data...");
     }
   }, []);
 

@@ -28,11 +28,6 @@ function Tweet({ tweet }) {
 
   return (
     <div className="tweet">
-      <img
-        className="h-12 w-30 rounded-full"
-        // src={user.avatar}
-        alt={`Profile image of ${username}`}
-      />
       <h2>{username}</h2>
       {timeAgo && <p className="date text-gray-500">{timeAgo}</p>}
       <p className="text-gray-800">{content}</p>

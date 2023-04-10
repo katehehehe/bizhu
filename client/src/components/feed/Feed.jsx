@@ -18,7 +18,7 @@ function Feed() {
 
   return (
     <div className="feed">
-      {isLoggedin && <NewPostForm onNewPost={handleNewTweet} />}
+      <NewPostForm onNewPost={handleNewTweet} />
       <TweetList />
     </div>
   );
