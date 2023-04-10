@@ -38,6 +38,29 @@
   align-self: flex-end;
   margin-left: auto;
 }
+
+/* Hide the input element */
+#image {
+  display: none;
+}
+
+/* Style the icon */
+.image-upload label {
+  cursor: pointer;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: #f5f8fa;
+  text-align: center;
+  line-height: 30px;
+}
+
+.image-upload label i {
+  font-size: 18px;
+  color: #657786;
+}
+
 @media (max-width: 767px) {
   .new-post-form,
   .post {

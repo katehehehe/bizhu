@@ -3,13 +3,12 @@
   display: flex;
   flex-direction: column;
 }
+
 .main {
   display: flex;
   flex-direction: row;
-  height: 100%;
-  overflow: hidden;
-
-  width: 100%;
+  align-items: stretch;
+  justify-content: center;
 }
 
 .sidebar {

@@ -16,15 +16,15 @@ function Main() {
 
   useEffect(() => {
     const storedIsLoggedin = localStorage.getItem("isLoggedin");
-    if (storedIsLoggedin) {
+    const storedToken = localStorage.getItem("token");
+    if (storedIsLoggedin && storedToken) {
       setIsLoggedin(true);
-    }
-  }, []);
-
-  useEffect(() => {
-    const storedUserName = localStorage.getItem("userName");
-    if (storedUserName) {
-      setUsername(storedUserName);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${storedToken}`;
+      axios.get("http://localhost:1337/api/me").then((response) => {
+        setUser(response.data);
+        setUsername(response.data.name);
+        localStorage.setItem("userName", response.data.name); // Set userName in local storage
+      });
     }
   }, []);
 

@@ -9,9 +9,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 function Navbar({}) {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
-  const [showUser, setShowUser] = useState(false);
 
-  const { isLoggedin } = useContext(MainContext);
+  const { isLoggedin, username } = useContext(MainContext);
 
   const handleLoginClick = () => {
     setShowLogin(true);
@@ -28,40 +27,34 @@ function Navbar({}) {
   const handleCloseRegisterClick = () => {
     setShowRegister(false);
   };
-  const handleUserClick = () => {
-    setShowUser(true);
-  };
-
-  const handleCloseUserClick = () => {
-    setShowUser(false);
-  };
 
   return (
     <div>
-      {/* <p className="text-center text-4xl flex-grow">Twitter Clone</p> */}
-      {/* {!isLoggedin && ( */}
       <div className="flex items-center navbar-buttons">
-        <button
-          className="navbar-button rounded-full mr-4 bg-twitterBlue"
-          onClick={handleLoginClick}
-        >
-          Login
-        </button>
-        <button
-          className="navbar-button rounded-full bg-twitterBlue new-botton"
-          onClick={handleRegisterClick}
-        >
-          Register
-        </button>
-
-        {/* {isLoggedin && ( */}
-        <div className="flex items-center">
-          <User />
-          <AccountCircleIcon className="text-2xl ml-4" />
-        </div>
-        {/* )} */}
+        {!isLoggedin && (
+          <>
+            <button
+              className="navbar-button rounded-full mr-4 bg-twitterBlue"
+              onClick={handleLoginClick}
+            >
+              Login
+            </button>
+            <button
+              className="navbar-button rounded-full bg-twitterBlue new-botton"
+              onClick={handleRegisterClick}
+            >
+              Register
+            </button>
+          </>
+        )}
+        {isLoggedin && (
+          <div className="flex items-center">
+            <User />
+            <span className="ml-2">{username}</span>
+            <AccountCircleIcon className="text-2xl ml-4" />
+          </div>
+        )}
       </div>
-      {/* )} */}
       {showLogin && <Login onClose={handleCloseClick} />}
       {showRegister && <Register onClose={handleCloseRegisterClick} />}
     </div>

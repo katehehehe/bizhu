@@ -1,12 +1,13 @@
-import React, { useState, createContext } from "react";
+import React, { useState, createContext, useEffect } from "react";
 import "../../styles/loginRegister.css";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { MainContext } from "../../Main";
+import axios from "axios";
 
 function Login({ onClose }) {
-  const { isLoggedin, setIsLoggedin, setUsername, updateUser, user } =
-    useContext(MainContext);
+  const { setIsLoggedin, setUsername, updateUser } = useContext(MainContext);
+
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,7 +20,7 @@ function Login({ onClose }) {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async (event) => {
+  const handleLogin = async (event) => {
     event.preventDefault();
     try {
       console.log("Submitting login form...");
@@ -33,6 +34,7 @@ function Login({ onClose }) {
       console.log("Response received:", response);
       const data = await response.json();
       console.log("Data received:", data);
+      localStorage.setItem("token", data.token);
       setIsLoggedin(true);
       localStorage.setItem("isLoggedin", "true");
       updateUser(data);
@@ -49,7 +51,7 @@ function Login({ onClose }) {
       <div className="modal">
         <form
           className="signin-form"
-          onSubmit={(e) => handleSubmit(e, navigate)}
+          onSubmit={(e) => handleLogin(e, navigate)}
         >
           <label className="form-label">
             Email:

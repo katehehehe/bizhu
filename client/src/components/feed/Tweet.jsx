@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { MainContext } from "../../Main";
 import "../../styles/tweet.css";
 
 function Tweet({ tweet }) {
-  const { username, content, createdAt, image } = tweet;
+  const { content, createdAt, image } = tweet;
+  const { username } = useContext(MainContext);
   const [imageData, setImageData] = useState(null);
   const date = new Date(Date.parse(createdAt));
   const now = new Date();
@@ -26,6 +28,11 @@ function Tweet({ tweet }) {
 
   return (
     <div className="tweet">
+      <img
+        className="h-12 w-30 rounded-full"
+        // src={user.avatar}
+        alt={`Profile image of ${username}`}
+      />
       <h2>{username}</h2>
       {timeAgo && <p className="date text-gray-500">{timeAgo}</p>}
       <p className="text-gray-800">{content}</p>

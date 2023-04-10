@@ -1,11 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { MainContext } from "../../Main";
+import "../../styles/user.css";
 
 const User = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, userName, setUser, setIsLoggedin } = useContext(MainContext);
+  const { userName, setUsername, setUser, setIsLoggedin } =
+    useContext(MainContext);
   const navigate = useNavigate();
+  const userRef = useRef();
 
   const handleMenuClick = () => {
     setIsOpen(!isOpen);
@@ -14,6 +17,8 @@ const User = () => {
   const handleLogoutClick = () => {
     setIsOpen(false);
     localStorage.removeItem("token");
+    localStorage.removeItem("isLoggedin");
+    setUsername("");
     setUser(null);
     setIsLoggedin(false);
     navigate("/");
@@ -24,23 +29,26 @@ const User = () => {
     navigate("/profile");
   };
 
-  // const handleScreenClick = () => {
-  //   setIsOpen(false);
-  // };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userRef.current && !userRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
 
-  // useEffect(() => {
-  //   document.addEventListener("click", handleScreenClick, false);
-  //   return () => {
-  //     document.removeEventListener("click", handleScreenClick, false);
-  //   };
-  // }, []);
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="relative">
+    <div ref={userRef} className="user relative">
       <div
         onClick={handleMenuClick}
         className="flex items-center justify-center w-32 h-8 rounded-md bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 focus:outline-none px-2"
       >
-        <span className="mr-1 font-medium">{user && userName}</span>
+        <span className="mr-1 font-medium">{userName}</span>
       </div>
 
       {isOpen && (

@@ -10,6 +10,7 @@ const PostModel = require("./models/TweetPost");
 const multer = require("multer");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const fs = require("fs");
+const { application } = require("express");
 
 app.use(cors());
 app.use(express.json());
@@ -26,9 +27,31 @@ async function connect() {
   }
 }
 connect();
+const jwtSecret = crypto.randomBytes(64).toString("hex");
 
 app.get("/", (request, response) => {
   response.send("Hello, world!");
+});
+
+app.get("/api/me", (req, res) => {
+  // Get the JWT token from the Authorization header
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token) {
+    // If the token is not present in the header, return a 401 Unauthorized status
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    // Verify the JWT token using the secret key
+    const decoded = jwt.verify(token, config.get("jwtSecret"));
+
+    // Return the decoded user data
+    return res.json(decoded.user);
+  } catch (err) {
+    // If the token is invalid or expired, return a 401 Unauthorized status
+    return res.status(401).json({ message: "Unauthorized" });
+  }
 });
 
 // users can get their information through username
@@ -45,8 +68,6 @@ app.get("/api/users/:username", async (request, response) => {
     response.status(400).json({ status: "error", error: err.message });
   }
 });
-
-const jwtSecret = crypto.randomBytes(64).toString("hex");
 
 // post the user information when they log in
 app.post("/api/login", async (request, response) => {
@@ -65,13 +86,39 @@ app.post("/api/login", async (request, response) => {
       response.status(401).json({ error: "Invalid email or password" });
       return;
     }
-    const token = jwt.sign({ id: user._id }, jwtSecret);
+    // const token = jwt.sign({ id: user._id }, jwtSecret);
+    const token = jwt.sign({ email: request.body.email }, jwtSecret, {
+      expiresIn: "2h",
+    });
+
     response.status(200).json({ token, name: user.username });
   } catch (err) {
     console.error(err);
     response.status(500).json({ error: "Server error" });
   }
 });
+// app.post("/api/login", async (req, res) => {
+//   try {
+//     const user = await UserModel.findOne({
+//       email: req.body.email,
+//       password: req.body.password,
+//     });
+
+//     if (!user) {
+//       return res.status(401).json({ error: "Unauthorized" });
+//     }
+
+//     const accessToken = jwt.sign(
+//       { id: user._id, email: user.email },
+//       process.env.ACCESS_TOKEN_SECRET
+//     );
+
+//     res.json({ token: accessToken });
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "Server error" });
+//   }
+// });
 // post the user information when they register
 app.post("/api/register", async (request, response) => {
   console.log(request.body);
@@ -117,36 +164,8 @@ app.get("/api/tweets/:id", async (request, response) => {
   }
 });
 
-// post a new tweet post
-// app.post("/api/tweet", async (request, response) => {
-//   try {
-//     const { content } = request.body;
-//     console.log("this is the content" + request.body);
-//     const tweetPost = await PostModel.create({ content });
-//     console.log("tweetPost created successfully" + tweetPost);
-//     response.status(200).json({ status: "ok", tweetPost });
-//   } catch (err) {
-//     response.status(400).json({ status: "error", error: err.message });
-//   }
-// });
+// the backend code that supports image upload
 
-// const storage = new GridFsStorage({
-//   url: uri,
-//   options: { useNewUrlParser: true, useUnifiedTopology: true },
-//   file: (req, file) => {
-//     const match = ["image/png", "image/jpeg", "image/jpg"];
-
-//     if (match.indexOf(file.mimetype) === -1) {
-//       const filename = `${Date.now()}-image-${file.originalname}`;
-//       return filename;
-//     }
-
-//     return {
-//       bucketName: "photos",
-//       filename: `${Date.now()}-image-${file.originalname}`,
-//     };
-//   },
-// });
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -157,53 +176,77 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage: storage });
-// read the image file into a Buffer object
+const authenticateJWT = (req, res, next) => {
+  const authHeader = req.headers.authorization;
 
-// app.post("/api/tweet", upload.single("image"), async (request, response) => {
-//   try {
-//     const { content } = request.body;
-//     console.log("Content:", request.body);
-//     // const imageUrl = request.file.filename;
-//     const imageData = fs.readFileSync(request.file.path);
-//     // encode the image data in Base64
-//     const base64ImageData = imageData.toString("base64");
-//     console.log("Image URL:", request.file.filename);
-//     const tweetPost = await PostModel.create({
-//       content,
-//       image: {
-//         data: fs.readFileSync("uploads/" + request.file.filename),
-//         contentType: request.file.mimetype,
-//       },
-//     });
+  if (authHeader) {
+    const token = authHeader.split(" ")[1];
 
-//     console.log("Tweet post created successfully:", tweetPost);
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: "Forbidden" });
+      }
+
+      req.user = user;
+      next();
+    });
+  } else {
+    res.status(401).json({ error: "Unauthorized" });
+  }
+};
+// app.post("/api/tweet", upload.single("image"), (request, response) => {
+//   const tweetPost = new PostModel({
+//     content: request.body.content,
+//     image: {
+//       data: fs.readFileSync("uploads/" + request.file.filename),
+//       contentType: request.file.mimetype,
+//     },
+//   });
+
+//   if (tweetPost) {
+//     tweetPost
+//       .save()
+//       .then((response) => console.log("image is saved"))
+//       .catch((err) => console.log(errr, "error has occurred"));
+
+//     console.log("Tweet post created successfully");
 //     response.status(200).json({ status: "ok", tweetPost });
-//   } catch (err) {
+//   } else {
 //     response.status(400).json({ status: "error", error: err.message });
 //   }
 // });
-app.post("/api/tweet", upload.single("image"), (request, response) => {
-  const tweetPost = new PostModel({
-    content: request.body.content,
-    image: {
-      data: fs.readFileSync("uploads/" + request.file.filename),
-      contentType: request.file.mimetype,
-    },
-  });
 
-  if (tweetPost) {
-    tweetPost
-      .save()
-      .then((response) => console.log("image is saved"))
-      .catch((err) => console.log(errr, "error has occurred"));
+app.post(
+  "/api/tweet",
+  authenticateJWT,
+  upload.single("image"),
+  async (req, res) => {
+    try {
+      const user = await UserModel.findById(req.user.id);
+      if (!user) {
+        return res.status(401).json({ error: "User not found" });
+      }
 
-    console.log("Tweet post created successfully");
-    response.status(200).json({ status: "ok", tweetPost });
-  } else {
-    response.status(400).json({ status: "error", error: err.message });
+      const tweetPost = new PostModel({
+        content: req.body.content,
+        image: {
+          data: fs.readFileSync("uploads/" + req.file.filename),
+          contentType: req.file.mimetype,
+        },
+        user: user._id,
+      });
+
+      await tweetPost.save();
+      user.tweetPosts.push(tweetPost._id);
+      await user.save();
+
+      res.status(201).json({ tweetPost });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: "Server error" });
+    }
   }
-});
-
+);
 app.listen(1337, () => {
   console.log("Server started on port 1337");
 });

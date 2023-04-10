@@ -6,11 +6,11 @@ const TweetPost = new mongoose.Schema(
     image: { data: Buffer, contentType: String },
     createdAt: { type: Date, default: Date.now },
 
-    // user: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: "UserData",
-    //   required: true,
-    // },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "UserData",
+      required: true,
+    },
   },
   { collection: "tweet-posts" }
 );

@@ -1,20 +1,24 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { MainContext } from "../../Main";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
 import "../../styles/newPostForm.css";
 
 function NewPostForm({ onNewPost }) {
   const [content, setContent] = useState("");
-  const { user } = useContext(MainContext);
+  const { user, username } = useContext(MainContext);
   const [image, setImage] = useState(null);
 
   const handleContentChange = (event) => {
     setContent(event.target.value);
   };
   const handleImageChange = (event) => {
-    setImage(event.target.files[0]); // update the state with the selected file
+    const file = event.target.files[0];
+    setImage(URL.createObjectURL(file));
   };
-
+  const handleImageRemove = () => {
+    setImage(null);
+  };
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -26,13 +30,14 @@ function NewPostForm({ onNewPost }) {
         formData.append("image", image); // add the image file to the form data
         console.log("form data:", formData);
       }
-
+      const token = localStorage.getItem("token");
       const response = await axios.post(
         "http://localhost:1337/api/tweet",
         formData, // use the form data as the request body
         {
           headers: {
             "Content-Type": "multipart/form-data", // set the content type header to multipart/form-data
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -57,11 +62,6 @@ function NewPostForm({ onNewPost }) {
   return (
     <form className="new-post-form flex" onSubmit={handleSubmit}>
       <div className="form-content">
-        {/* <img
-        className="h-12 w-12 rounded-full"
-        src={user.avatar}
-        alt={`Profile image of ${user.name}`}
-      /> */}
         <textarea
           id="content"
           value={content}
@@ -72,10 +72,24 @@ function NewPostForm({ onNewPost }) {
       </div>
       <div className="flex flex-row justify-between w-full">
         <div className="image-upload inline-block mx-2">
-          <input type="file" id="image" onChange={handleImageChange} />
-          <label htmlFor="image">
-            <i className="fas fa-image"></i>
-          </label>
+          {image ? (
+            <div>
+              <img src={image} alt="Selected" width="150" />
+              <button onClick={handleImageRemove}>Remove Image</button>
+            </div>
+          ) : (
+            <label htmlFor="image">
+              <AddPhotoAlternateIcon />
+            </label>
+          )}
+          <input
+            type="file"
+            id="image"
+            name="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            disabled={image ? true : false} // Disable the input if an image is already selected
+          />
         </div>
         <button
           type="submit"
