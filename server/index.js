@@ -26,7 +26,8 @@ async function connect() {
   }
 }
 connect();
-const jwtSecret = crypto.randomBytes(64).toString("hex");
+// to generate the screte key for the use of token
+const JWT_SECRET = crypto.randomBytes(32).toString("hex");
 
 app.get("/", (request, response) => {
   response.send("Hello, world!");
@@ -48,6 +49,30 @@ app.get("/api/users/:username", async (request, response) => {
 });
 
 // post the user information when they log in
+// app.post("/api/login", async (request, response) => {
+//   console.log(request.body);
+//   try {
+//     const user = await UserModel.findOne({ email: request.body.email }).exec();
+//     if (!user) {
+//       response.status(401).json({ error: "Invalid email or password" });
+//       return;
+//     }
+//     const passwordMatch = await bcrypt.compare(
+//       request.body.password,
+//       user.password
+//     );
+//     if (!passwordMatch) {
+//       response.status(401).json({ error: "Invalid email or password" });
+//       return;
+//     }
+
+//     response.status(200).json({ name: user.username });
+//   } catch (err) {
+//     console.error(err);
+//     response.status(500).json({ error: "Server error" });
+//   }
+// });
+
 app.post("/api/login", async (request, response) => {
   console.log(request.body);
   try {
@@ -65,35 +90,18 @@ app.post("/api/login", async (request, response) => {
       return;
     }
 
-    response.status(200).json({ name: user.username });
+    // Generate JWT token
+    const token = jwt.sign({ userId: user._id }, JWT_SECRET, {
+      expiresIn: "1h",
+    });
+    // response.cookie("token", token, { httpOnly: true });
+    response.status(200).json({ name: user.username, token });
   } catch (err) {
     console.error(err);
     response.status(500).json({ error: "Server error" });
   }
 });
-// app.post("/api/login", async (req, res) => {
-//   try {
-//     const user = await UserModel.findOne({
-//       email: req.body.email,
-//       password: req.body.password,
-//     });
 
-//     if (!user) {
-//       return res.status(401).json({ error: "Unauthorized" });
-//     }
-
-//     const accessToken = jwt.sign(
-//       { id: user._id, email: user.email },
-//       process.env.ACCESS_TOKEN_SECRET
-//     );
-
-//     res.json({ token: accessToken });
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ error: "Server error" });
-//   }
-// });
-// post the user information when they register
 app.post("/api/register", async (request, response) => {
   console.log(request.body);
   try {

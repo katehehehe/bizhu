@@ -3,7 +3,6 @@ import "../../styles/loginRegister.css";
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { MainContext } from "../../Main";
-import axios from "axios";
 
 function Login({ onClose }) {
   const { setIsLoggedin, setUsername, updateUser } = useContext(MainContext);
@@ -31,16 +30,26 @@ function Login({ onClose }) {
         },
         body: JSON.stringify({ email, password }),
       });
+      console.log("the email is ", email);
+      console.log("the password is ", password);
       console.log("Response received:", response);
       const data = await response.json();
       console.log("Data received:", data);
-      localStorage.setItem("token", data.token);
-      setIsLoggedin(true);
-      localStorage.setItem("isLoggedin", "true");
-      updateUser(data);
-      setUsername(data.name);
-      console.log("the current user is" + data.name);
-      onClose();
+      if (data.token) {
+        // If a JWT token is received, set it in local storage
+        localStorage.setItem("token", data.token);
+
+        // Set the isLoggedIn flag and current user data in the MainContext
+        setIsLoggedin(true);
+        localStorage.setItem("isLoggedin", "true");
+        updateUser(data);
+        setUsername(data.name);
+        console.log("the current user is" + data.name);
+
+        onClose();
+      } else {
+        console.error("Failed to receive JWT token from server.");
+      }
     } catch (error) {
       console.error(error);
     }

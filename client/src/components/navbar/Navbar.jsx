@@ -6,7 +6,7 @@ import User from "./User";
 import { MainContext } from "../../Main";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
-function Navbar({}) {
+function Navbar() {
   const [showLogin, setShowLogin] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
@@ -48,7 +48,7 @@ function Navbar({}) {
 
         <div className="flex items-center">
           <User />
-          <span className="ml-2">{username}</span>
+          {username && <span className="ml-2">{username}</span>}
           <AccountCircleIcon className="text-2xl ml-4" />
         </div>
       </div>

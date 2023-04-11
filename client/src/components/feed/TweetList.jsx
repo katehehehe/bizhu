@@ -22,9 +22,6 @@ function TweetList() {
     fetchTweets();
   }, [newTweet]); // re-fetch tweets when new tweet is added
 
-  console.log("Tweets:", tweets.tweetPosts);
-  console.log("Is tweets an array?", Array.isArray(tweets.tweetPosts));
-
   const tweetsArray = tweets.tweetPosts;
   return (
     <div className="feed">
@@ -33,7 +30,6 @@ function TweetList() {
           .slice(0)
           .reverse()
           .map((tweet) => {
-            console.log("this is one tweet" + tweet);
             return <Tweet key={tweet.id} tweet={tweet} />;
           })}
     </div>

@@ -6,20 +6,33 @@
   background-color: #fff;
 }
 
-.tweet h2 {
-  margin: 0 0 5px;
-  font-size: 40px;
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.username {
+  margin: 0;
+  font-size: 24px;
   font-weight: bold;
   color: #14171a;
 }
 
-.tweet p {
-  margin: 0;
+.time-ago {
+  margin: 0 0 0 10px;
+  font-size: 20px;
+  color: #657786;
+}
+
+.content {
+  margin: 10px 0;
   font-size: 20px;
   text-align: left;
   line-height: 1.4;
 }
+
 .tweet img {
-  max-width: 50%; /* make the image proportion to the screen size */
-  height: auto; /* maintain aspect ratio */
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
 }

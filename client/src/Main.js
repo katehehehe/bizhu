@@ -3,6 +3,7 @@ import Navbar from "./components/navbar/Navbar";
 import Sidebar from "./components/sidebar/Sidebar";
 import Feed from "./components/feed/Feed";
 import axios from "axios";
+import jwtDecode from "jwt-decode";
 
 export const MainContext = createContext();
 
@@ -10,44 +11,43 @@ function Main() {
   const [isLoggedin, setIsLoggedin] = useState(
     localStorage.getItem("isLoggedin") === "true"
   );
-  const [user, setUser] = useState(null);
-  const [username, setUsername] = useState("");
+  // const [user, setUser] = useState(null);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || null
+  );
+  // const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(
+    localStorage.getItem("username") || ""
+  );
   const [newPost, setNewPost] = useState(null);
 
   useEffect(() => {
     const storedIsLoggedin = localStorage.getItem("isLoggedin");
     if (storedIsLoggedin) {
       setIsLoggedin(true);
-      // Replace the following line with your code to retrieve user data
-      console.log("Retrieving user data...");
+    }
+
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    const userString = localStorage.getItem("user"); // replace "user" with your key
+    const getUser = JSON.parse(userString);
+    const storedUsername = getUser.name;
+    if (storedUsername) {
+      setUsername(storedUsername);
     }
   }, []);
 
   const updateUser = (userData) => {
     setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
   const updateUserName = (name) => {
     setUsername(name);
-    localStorage.setItem("userName", name);
+    localStorage.setItem("username", name);
   };
-
-  const handleSubmit = async (event, content) => {
-    event.preventDefault();
-    try {
-      console.log("Submitting a new tweet...");
-      const response = await axios.post("http://localhost:1337/api/tweet", {
-        data: content,
-      });
-      console.log("Response received:", response);
-      const data = response.data;
-      console.log("New post created:", data);
-      setNewPost(data);
-    } catch (error) {
-      console.error("Error creating post:", error);
-    }
-  };
-
   return (
     <div className="App">
       <MainContext.Provider
@@ -59,16 +59,13 @@ function Main() {
           user,
           setUser,
           updateUser,
+          updateUserName,
         }}
       >
         <Navbar />
         <div className="main">
           <Sidebar className="sidebar" />
-          <Feed
-            className="feed"
-            newPost={newPost}
-            handleSubmit={handleSubmit}
-          />
+          <Feed className="feed" newPost={newPost} />
         </div>
       </MainContext.Provider>
     </div>

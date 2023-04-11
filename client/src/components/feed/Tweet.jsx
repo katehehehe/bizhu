@@ -3,8 +3,8 @@ import { MainContext } from "../../Main";
 import "../../styles/tweet.css";
 
 function Tweet({ tweet }) {
-  const { content, createdAt, image } = tweet;
-  const { username } = useContext(MainContext);
+  const { username, content, createdAt, image } = tweet;
+  // const { username, setUsername } = useContext(MainContext);
   const [imageData, setImageData] = useState(null);
   const date = new Date(Date.parse(createdAt));
   const now = new Date();
@@ -28,9 +28,11 @@ function Tweet({ tweet }) {
 
   return (
     <div className="tweet">
-      <h2>{username}</h2>
-      {timeAgo && <p className="date text-gray-500">{timeAgo}</p>}
-      <p className="text-gray-800">{content}</p>
+      <div className="header">
+        <h2 className="username">{username}</h2>
+        {timeAgo && <p className="time-ago text-gray-500">{timeAgo}</p>}
+      </div>
+      <p className="content text-gray-800">{content}</p>
       {imageData && <img src={imageData} alt="tweet" />}
     </div>
   );
