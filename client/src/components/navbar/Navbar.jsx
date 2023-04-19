@@ -4,7 +4,6 @@ import Login from "./Login";
 import Register from "./Register";
 import User from "./User";
 import { MainContext } from "../../Main";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 function Navbar() {
   const [showLogin, setShowLogin] = useState(false);
@@ -28,32 +27,41 @@ function Navbar() {
     setShowRegister(false);
   };
 
+  if (!isLoggedin) {
+    return (
+      <div>
+        <div className="flex items-center navbar-buttons">
+          <>
+            <button
+              className="navbar-button rounded-full mr-4 bg-twitterBlue"
+              onClick={handleLoginClick}
+            >
+              Login
+            </button>
+            <button
+              className="navbar-button rounded-full bg-twitterBlue new-botton"
+              onClick={handleRegisterClick}
+            >
+              Register
+            </button>
+          </>
+        </div>
+        {showLogin && <Login onClose={handleCloseClick} />}
+        {showRegister && <Register onClose={handleCloseRegisterClick} />}
+      </div>
+    );
+  }
+
   return (
     <div>
       <div className="flex items-center navbar-buttons">
-        <>
-          <button
-            className="navbar-button rounded-full mr-4 bg-twitterBlue"
-            onClick={handleLoginClick}
-          >
-            Login
-          </button>
-          <button
-            className="navbar-button rounded-full bg-twitterBlue new-botton"
-            onClick={handleRegisterClick}
-          >
-            Register
-          </button>
-        </>
-
         <div className="flex items-center">
           <User />
-          {username && <span className="ml-2">{username}</span>}
-          <AccountCircleIcon className="text-2xl ml-4" />
+          <span className="navbar-username text-lg font-bold">
+            {username}
+          </span>{" "}
         </div>
       </div>
-      {showLogin && <Login onClose={handleCloseClick} />}
-      {showRegister && <Register onClose={handleCloseRegisterClick} />}
     </div>
   );
 }

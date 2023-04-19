@@ -1,0 +1,78 @@
+.user-avatar {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.mytweets-wrapper {
+  width: 100%;
+}
+
+h1 {
+  font-size: 48px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+.user-header {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  width: 100%; /* Add this */
+}
+
+.user-avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar {
+  display: block;
+  margin: auto;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-left: 1rem;
+}
+
+.user-info img {
+  width: 100px;
+  height: 100px;
+  margin-right: 20px;
+}
+
+.user-info p {
+  font-size: 24px;
+  margin: 0;
+}
+.user-page-container {
+  margin: 0 10px;
+}
+
+@media screen and (min-width: 768px) {
+  .user-page-container {
+    max-width: 768px;
+    margin: 0 auto;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .user-page-container {
+    max-width: 1024px;
+  }
+}
+
+@media screen and (min-width: 1440px) {
+  .user-page-container {
+    max-width: 1440px;
+  }
+}

@@ -31,6 +31,7 @@ function NewPostForm({ onNewPost }) {
     try {
       console.log("Submitting a new tweet...");
       const formData = new FormData(); // create a new FormData object
+      formData.append("username", username);
       formData.append("content", content); // add the text content to the form data
       console.log("A image is uploaded", imageSubmit);
       if (imageSubmit) {
@@ -80,7 +81,7 @@ function NewPostForm({ onNewPost }) {
         <div className="image-upload inline-block mx-2">
           {imageSubmit ? (
             <div>
-              <img src={imageDisplay} alt="Selected" width="150" />
+              <img src={imageSubmit} alt="Selected" width="150" />
               <button onClick={handleImageRemove}>Remove Image</button>
             </div>
           ) : (

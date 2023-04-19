@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from "react";
 import { MainContext } from "../../Main";
 import TweetList from "./TweetList";
 import NewPostForm from "./NewPostForm";
-import axios from "axios";
 
 function Feed() {
   const [tweets, setTweets] = useState({ tweetPosts: [] });
@@ -13,12 +12,9 @@ function Feed() {
     setNewTweet(tweet);
   };
 
-  console.log("Tweets:", tweets.tweetPosts);
-  console.log("Is tweets an array?", Array.isArray(tweets.tweetPosts));
-
   return (
     <div className="feed">
-      <NewPostForm onNewPost={handleNewTweet} />
+      {isLoggedin && <NewPostForm onNewPost={handleNewTweet} />}
       <TweetList />
     </div>
   );

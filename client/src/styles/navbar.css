@@ -39,6 +39,18 @@
   color: white;
   cursor: pointer;
 }
+.navbar-username {
+  font-size: 1.1rem; /* increase font size */
+  font-weight: bold; /* add font weight */
+  margin-left: 5px;
+  margin-right: 20px;
+}
+
+@media (max-width: 640px) {
+  .navbar-username {
+    font-size: 0.9rem;
+  }
+}
 
 @media (max-width: 640px) {
   .navbar-button {

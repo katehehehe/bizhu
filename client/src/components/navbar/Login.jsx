@@ -1,18 +1,17 @@
-import React, { useState, createContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import "../../styles/loginRegister.css";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import { MainContext } from "../../Main";
 
 function Login({ onClose }) {
-  const { setIsLoggedin, setUsername, updateUser } = useContext(MainContext);
-
+  const { setIsLoggedin, updateUser } = useContext(MainContext);
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
   };
 
   const handlePasswordChange = (event) => {
@@ -28,31 +27,35 @@ function Login({ onClose }) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
+        credentials: "include",
       });
-      console.log("the email is ", email);
-      console.log("the password is ", password);
-      console.log("Response received:", response);
-      const data = await response.json();
-      console.log("Data received:", data);
-      if (data.token) {
-        // If a JWT token is received, set it in local storage
-        localStorage.setItem("token", data.token);
 
-        // Set the isLoggedIn flag and current user data in the MainContext
-        setIsLoggedin(true);
-        localStorage.setItem("isLoggedin", "true");
+      const data = await response.json();
+      console.log(data);
+      if (data.token) {
         updateUser(data);
         setUsername(data.name);
-        console.log("the current user is" + data.name);
-
+        setIsLoggedin(true);
         onClose();
       } else {
-        console.error("Failed to receive JWT token from server.");
+        displayErrorMessage(
+          "Failed to log in. Please check your username and password."
+        );
       }
     } catch (error) {
       console.error(error);
+      displayErrorMessage(
+        "Failed to log in. Please check your username and password."
+      );
     }
+  };
+
+  const displayErrorMessage = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 3000); // 3 seconds
   };
 
   return (
@@ -63,12 +66,12 @@ function Login({ onClose }) {
           onSubmit={(e) => handleLogin(e, navigate)}
         >
           <label className="form-label">
-            Email:
+            Username:
             <input
               className="form-input"
-              type="email"
-              value={email}
-              onChange={handleEmailChange}
+              type="text"
+              value={username}
+              onChange={handleUsernameChange}
             />
           </label>
           <label className="form-label">
@@ -80,6 +83,11 @@ function Login({ onClose }) {
               onChange={handlePasswordChange}
             />
           </label>
+          {errorMessage && (
+            <div className="notification-wrapper">
+              <p>{errorMessage}</p>
+            </div>
+          )}
           <button className="form-button bg-twitterBlue" type="submit">
             Log In
           </button>

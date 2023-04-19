@@ -1,38 +1,141 @@
-.tweet {
+.tweet-link {
+  text-decoration: none;
+}
+
+.tweet-wrapper {
   border: 1px solid #e6ecf0;
   border-radius: 5px;
+  background-color: #fff;
   padding: 10px;
-  margin: 0 50px 10px 0;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.tweet {
+  border-radius: 5px;
   background-color: #fff;
 }
 
 .header {
   display: flex;
   align-items: center;
+  margin-bottom: 0.5rem;
 }
 
 .username {
-  margin: 0;
+  display: inline-block;
+  margin-right: 0.5rem;
   font-size: 24px;
   font-weight: bold;
   color: #14171a;
 }
 
+.tweet-avatar {
+  height: 3rem;
+  width: 3rem;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-right: 0.8rem;
+}
+
 .time-ago {
-  margin: 0 0 0 10px;
+  display: inline-block;
+  margin-left: 0.5rem;
   font-size: 20px;
   color: #657786;
 }
 
 .content {
-  margin: 10px 0;
+  margin-left: 3.5rem;
   font-size: 20px;
   text-align: left;
   line-height: 1.4;
 }
 
-.tweet img {
-  max-width: 100%;
+.tweet-wrapper .tweet .tweet-post-img {
+  margin-left: 3.5rem;
+  width: 400px;
   height: auto;
+  object-fit: cover;
   margin-top: 10px;
+}
+
+.edit-button {
+  position: absolute;
+  top: 5px;
+  right: 30px;
+  font-size: 1.5rem;
+}
+
+.delete-button {
+  color: #f9aeae;
+  cursor: pointer;
+  font-size: 1.5rem;
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.delete-confirmation {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.15);
+  margin: 20px 0;
+  padding: 20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+.delete-confirmation p {
+  margin: 0 0 10px 0;
+}
+.delete-confirmation button {
+  background-color: #f9aeae;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  margin: 0 10px;
+  padding: 5px 10px;
+}
+
+.delete-confirmation button:first-child {
+  background-color: #718096;
+}
+
+@media screen and (max-width: 991px) {
+  .tweet .tweet-post-img {
+    max-width: 300px;
+  }
+  .tweet-wrapper {
+    margin-right: 30px;
+  }
+}
+@media screen and (max-width: 600px) {
+  .tweet .tweet-post-img {
+    max-width: 250px;
+  }
+}
+
+@media screen and (max-width: 374px) {
+  .tweet-wrapper .tweet .tweet-post-img {
+    max-width: 100%;
+    margin-left: 0;
+  }
+  .tweet-wrapper {
+    margin-right: 10px;
+  }
+  .tweet-wrapper .tweet .tweet-avatar {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+}
+@media (min-width: 992px) {
+  .tweet-wrapper {
+    margin-right: 50px;
+  }
 }

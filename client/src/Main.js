@@ -3,51 +3,44 @@ import Navbar from "./components/navbar/Navbar";
 import Sidebar from "./components/sidebar/Sidebar";
 import Feed from "./components/feed/Feed";
 import axios from "axios";
-import jwtDecode from "jwt-decode";
+import Search from "./components/search/Search";
 
 export const MainContext = createContext();
 
 function Main() {
-  const [isLoggedin, setIsLoggedin] = useState(
-    localStorage.getItem("isLoggedin") === "true"
-  );
-  // const [user, setUser] = useState(null);
-  const [user, setUser] = useState(
-    JSON.parse(localStorage.getItem("user")) || null
-  );
-  // const [username, setUsername] = useState("");
-  const [username, setUsername] = useState(
-    localStorage.getItem("username") || ""
-  );
+  const [isLoggedin, setIsLoggedin] = useState(false);
+  const [username, setUsername] = useState(null);
   const [newPost, setNewPost] = useState(null);
 
+  const checkIsLoggedIn = async () => {
+    try {
+      const response = await axios.get("http://localhost:1337/api/isLoggedIn", {
+        withCredentials: true,
+      });
+      console.log("response from main ", response);
+      if (response.data.username) {
+        setUsername(response.data.username);
+        setIsLoggedin(true);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
   useEffect(() => {
-    const storedIsLoggedin = localStorage.getItem("isLoggedin");
-    if (storedIsLoggedin) {
-      setIsLoggedin(true);
-    }
-
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    const userString = localStorage.getItem("user"); // replace "user" with your key
-    const getUser = JSON.parse(userString);
-    const storedUsername = getUser.name;
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
+    checkIsLoggedIn();
   }, []);
 
+  console.log("isloggedin", isLoggedin);
+  console.log("username", username);
+
   const updateUser = (userData) => {
-    setUser(userData);
-    localStorage.setItem("user", JSON.stringify(userData));
+    setUsername(userData.name);
   };
 
   const updateUserName = (name) => {
     setUsername(name);
-    localStorage.setItem("username", name);
   };
+
   return (
     <div className="App">
       <MainContext.Provider
@@ -56,16 +49,21 @@ function Main() {
           setIsLoggedin,
           username,
           setUsername,
-          user,
-          setUser,
           updateUser,
           updateUserName,
         }}
       >
         <Navbar />
-        <div className="main">
-          <Sidebar className="sidebar" />
-          <Feed className="feed" newPost={newPost} />
+        <div className="app-container">
+          <div className="sidebar">{<Sidebar />}</div>
+          <div className="main-component">
+            <div className="feed-wrapper">
+              <Feed newPost={newPost} />
+            </div>
+          </div>
+          <div className="search-wrapper search-wrapper--mobile">
+            <Search />
+          </div>
         </div>
       </MainContext.Provider>
     </div>
