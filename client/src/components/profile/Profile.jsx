@@ -19,12 +19,9 @@ function Profile() {
   useEffect(() => {
     const checkIsLoggedIn = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:1337/api/isLoggedIn",
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get("/api/isLoggedIn", {
+          withCredentials: true,
+        });
         if (response.data.username) {
           console.log("check the response ", response.data);
           setUsername(response.data.username);
@@ -45,9 +42,6 @@ function Profile() {
       fetchUserData();
     }
   }, [username]);
-
-  console.log("---this is the username", username);
-  console.log("---this is the userid", userId);
 
   const handleAvatarChange = (event) => {
     setAvatar(event.target.files[0]);
@@ -71,16 +65,12 @@ function Profile() {
       if (newBio !== "") {
         formData.append("bio", newBio);
       }
-      const response = await axios.put(
-        `http://localhost:1337/api/users/${userId}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
+      const response = await axios.put(`/api/users/${userId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true,
+      });
       console.log(response.data);
 
       setUsername(response.data.username);
@@ -95,9 +85,7 @@ function Profile() {
   const fetchUserData = async () => {
     try {
       console.log("this is the username", username);
-      const response = await axios.get(
-        `http://localhost:1337/api/users/${username}`
-      );
+      const response = await axios.get(`/api/users/${username}`);
       console.log("get the user data", response);
 
       const password = response.data.user.password;

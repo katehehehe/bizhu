@@ -31,7 +31,7 @@ const User = () => {
       setUsername("");
       setIsLoggedin(false);
       localStorage.removeItem("isLoggedIn");
-      await fetch("http://localhost:1337/api/logOut", {
+      await fetch("/api/logOut", {
         method: "POST",
         credentials: "include",
       });

@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useContext,
-  useEffect,
-  createContext,
-  useRef,
-} from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import HomeIcon from "@mui/icons-material/Home";
 import SearchIcon from "@mui/icons-material/Search";
@@ -35,7 +29,7 @@ function Sidebar() {
   };
   useEffect(() => {
     async function fetchUsernames() {
-      const response = await axios.get("http://localhost:1337/api/usernames");
+      const response = await axios.get("/api/usernames");
       setExistingUsernames(response.data);
     }
 

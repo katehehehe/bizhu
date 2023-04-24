@@ -12,7 +12,7 @@ function Register({ onClose }) {
   // Retrieve all existing usernames on component mount
   useEffect(() => {
     async function fetchUsernames() {
-      const response = await axios.get("http://localhost:1337/api/usernames");
+      const response = await axios.get("/api/usernames");
       setExistingUsernames(response.data);
     }
 
@@ -29,16 +29,12 @@ function Register({ onClose }) {
   console.log("this is the token, ", token);
   async function registerUser(values) {
     try {
-      const response = await axios.post(
-        "http://localhost:1337/api/register",
-        values,
-        {
-          headers: {
-            "Content-type": "application/json",
-          },
-          credentials: "include",
-        }
-      );
+      const response = await axios.post("/api/register", values, {
+        headers: {
+          "Content-type": "application/json",
+        },
+        credentials: "include",
+      });
       console.log(response.data);
       if (response.data.status === "ok") {
         updateUser(response.data);

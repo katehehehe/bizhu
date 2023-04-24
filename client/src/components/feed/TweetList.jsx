@@ -12,7 +12,7 @@ function TweetList() {
     const fetchUsers = async () => {
       try {
         console.log("start to fetch users");
-        const response = await axios.get("http://localhost:1337/api/users");
+        const response = await axios.get("/api/users");
         const data = response.data;
 
         setUsers(data);
@@ -24,7 +24,7 @@ function TweetList() {
     // fetch tweets from API
     const fetchTweets = async () => {
       try {
-        const response = await axios.get("http://localhost:1337/api/tweets");
+        const response = await axios.get("/api/tweets");
         const data = response.data;
 
         setTweets(data);

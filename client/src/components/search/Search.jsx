@@ -14,7 +14,7 @@ function Search() {
   // Retrieve all existing usernames on component mount
   useEffect(() => {
     async function fetchUsernames() {
-      const response = await axios.get("http://localhost:1337/api/usernames");
+      const response = await axios.get("/api/usernames");
       setExistingUsernames(response.data);
     }
 

@@ -40,7 +40,7 @@ function NewPostForm({ onNewPost }) {
       }
 
       const response = await axios.post(
-        "http://localhost:1337/api/tweet",
+        "/api/tweet",
         formData, // use the form data as the request body
         {
           headers: {

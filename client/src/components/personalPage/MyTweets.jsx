@@ -13,12 +13,9 @@ function MyTweets() {
   useEffect(() => {
     const checkIsLoggedIn = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:1337/api/isLoggedIn",
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get("/api/isLoggedIn", {
+          withCredentials: true,
+        });
         if (response.data.username) {
           setCurrentUser(response.data.username);
         }
@@ -30,9 +27,7 @@ function MyTweets() {
   }, []);
   useEffect(() => {
     const fetchUserPosts = async () => {
-      const response = await axios.get(
-        `http://localhost:1337/api/user/posts/${username}`
-      );
+      const response = await axios.get(`/api/user/posts/${username}`);
       const userPosts = response.data;
       setPosts(userPosts.reverse());
     };
@@ -43,7 +38,7 @@ function MyTweets() {
 
   const handleDelete = async (postId) => {
     try {
-      await axios.delete(`http://localhost:1337/api/tweets/${postId}`, {
+      await axios.delete(`/api/tweets/${postId}`, {
         withCredentials: true,
       });
       setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
@@ -59,7 +54,7 @@ function MyTweets() {
     }
     try {
       const response = await axios.put(
-        `http://localhost:1337/api/tweets/${postId}`,
+        `/api/tweets/${postId}`,
         {
           content: updatedContent,
         },

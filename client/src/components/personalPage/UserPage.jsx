@@ -18,12 +18,9 @@ function UserPage() {
   useEffect(() => {
     const checkIsLoggedIn = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:1337/api/isLoggedIn",
-          {
-            withCredentials: true,
-          }
-        );
+        const response = await axios.get("/api/isLoggedIn", {
+          withCredentials: true,
+        });
         if (response.data.username) {
           setIsLoggedin(true);
           setCurrentUsername(response.data.username);
@@ -37,9 +34,7 @@ function UserPage() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:1337/api/users/${username}`
-        );
+        const response = await axios.get(`/api/users/${username}`);
         setUser(response.data);
       } catch (error) {
         console.error(error);

@@ -14,7 +14,7 @@ function Main() {
 
   const checkIsLoggedIn = async () => {
     try {
-      const response = await axios.get("http://localhost:1337/api/isLoggedIn", {
+      const response = await axios.get("/api/isLoggedIn", {
         withCredentials: true,
       });
       console.log("response from main ", response);
