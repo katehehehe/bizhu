@@ -1,5 +1,27 @@
 {
-  "dependencies": {
-    "next-auth": "^4.22.0"
+  "name": "project3-bizhu_he-siqi_lei",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "concurrently \"npm run dev -w server\" \"npm run dev -w client\"",
+    "build": "npm run build -ws --if-present",
+    "prod": "npm run start -w server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katehehehe/project3-bizhu_he-siqi_lei.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "homepage": "https://github.com/katehehehe/project3-bizhu_he-siqi_lei.git#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "concurrently": "^8.0.1"
   }
 }

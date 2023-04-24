@@ -8,9 +8,9 @@ const crypto = require("crypto");
 const UserModel = require("./models/User");
 const PostModel = require("./models/TweetPost");
 const multer = require("multer");
-const { GridFsStorage } = require("multer-gridfs-storage");
 const fs = require("fs");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 // Allow cross-origin requests with credentials from http://localhost:3000
 app.use(
@@ -74,9 +74,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-app.get("/", (request, response) => {
-  response.send("Hello, world!");
-});
 // GET all users
 app.get("/api/users", async (req, res) => {
   try {
@@ -503,6 +500,14 @@ app.delete("/api/tweets/:id", authMiddleware, async (req, res) => {
   } else {
     res.status(401).send({ message: "Unauthorized to delete this tweet." });
   }
+});
+
+let client_dir = path.join(__dirname, "..", "client", "build");
+
+app.use(express.static(client_dir));
+app.get("*", function (req, res) {
+  console.log("received request");
+  res.sendFile(path.join(client_dir, "index.html"));
 });
 
 app.listen(1337, () => {

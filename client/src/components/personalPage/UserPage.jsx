@@ -84,9 +84,11 @@ function UserPage() {
           <Link to="/profile" className="edit-icon-container">
             <div className="edit-icon-wrapper">
               {currentUsername === username && (
-                <EditIcon className="edit-icon" />
+                <>
+                  <EditIcon className="edit-icon" />
+                  <span className="edit-icon-text">Edit Profile</span>
+                </>
               )}
-              <span className="edit-icon-text">Edit Profile</span>
             </div>
           </Link>
         </div>
