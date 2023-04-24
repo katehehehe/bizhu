@@ -12,7 +12,10 @@ const fs = require("fs");
 const cookieParser = require("cookie-parser");
 const path = require("path");
 
+<<<<<<< HEAD
 // Allow cross-origin requests with credentials from http://localhost:3000
+=======
+>>>>>>> d741aeb (Update index.js)
 // app.use(
 //   cors({
 //      origin: "http://localhost:3000",
