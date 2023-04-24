@@ -15,7 +15,7 @@ const path = require("path");
 // Allow cross-origin requests with credentials from http://localhost:3000
 app.use(
   cors({
-//     origin: "http://localhost:3000",
+    origin: "https://bizhu-he-siqi-lei-project3.onrender.com",
     credentials: true,
   })
 );
